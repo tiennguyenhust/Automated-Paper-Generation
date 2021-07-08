@@ -4,7 +4,6 @@ To run the app
 $ streamlit run app.py
 """
 
-import fire
 import json
 import os
 import numpy as np
