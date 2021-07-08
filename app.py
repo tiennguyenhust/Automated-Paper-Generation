@@ -15,10 +15,24 @@ import model, sample, encoder
 import streamlit as st
 from PIL import Image
 
-image = Image.open('logo-epita.png')
-st.image(image, caption='*')
+st.title('Automatic Text Generation')
 
-key_words = st.text_input('Input your key words:')
+with st.sidebar:
+    st.subheader('Welcome!!!!')
+   
+    
+    st.text("Reference")
+    st.write("[Beginner’s Guide to Retrain GPT-2 (117M) to Generate Custom Text Content](https://medium.com/ai-innovation/beginners-guide-to-retrain-gpt-2-117m-to-generate-custom-text-content-8bb5363d8b7f)")
+
+    
+    st.subheader('Members:')
+    st.text("Zahra Hatami")
+    st.text("Van Tien Nguyen")
+    st.text("Christina-Zoi Mavroeidi")
+    st.text("Joshua Paul Marion Joseph")
+    st.text("David Raphael Bravo Marcial")
+
+
 
 def generate_paper(
     key_words,
@@ -63,8 +77,6 @@ def generate_paper(
         ckpt = tf.train.latest_checkpoint(os.path.join(models_dir, model_name))
         saver.restore(sess, ckpt)
 
-        if not key_words:
-            st.warning('You need to enter key words')
         context_tokens = enc.encode(key_words)
         generated = 0
         for _ in range(nsamples // batch_size):
@@ -77,6 +89,13 @@ def generate_paper(
                 
     return text
 
-if key_words:  
+
+key_words = st.text_input('Input your key words:')
+
+if st.button('Generate'):
+    if not key_words:
+        st.warning('You need to enter key words')
+        st.stop()
+        
     paper = generate_paper(key_words)
     st.markdown(paper)
